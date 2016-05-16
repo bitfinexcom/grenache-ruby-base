@@ -1,4 +1,6 @@
 module Grenache
+
+  # Store a single request information
   class Request
     attr_accessor :payload, :type, :opts, :_ts
 
@@ -14,8 +16,8 @@ module Grenache
       !!@block
     end
 
-    def yield
-      @block.call
+    def yield(params={})
+      @block.call(params)
     end
 
     def rid
@@ -28,6 +30,10 @@ module Grenache
 
     def dump_payload
       @dump_payload ||= Oj.dump(payload)
+    end
+
+    def to_json
+      Oj.dump([rid,type,payload])
     end
   end
 end

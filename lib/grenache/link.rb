@@ -1,28 +1,30 @@
 module Grenache
-
+  # Implement Grape connection helpers
   class Link
 
+    # Connect to grape
     def connect
       unless connected?
         ws_connect
       end
     end
-    alias :start :connect
 
+    # Return true if it's connected to Grape
     def connected?
-      @connected #delegate to ws?
+      @connected
     end
 
+    # Disconnect from grape
     def disconnect
       @ws.close
       @ws = nil
-      @connected = false
     end
-    alias :stop :disconnect
 
-    def request(type, payload, opts = {}, &block)
-      req = Request.new(type,payload,opts, block)
+    # Send a request to grape
+    def send(type, payload, opts = {}, &block)
+      req = Request.new(type,payload,opts, &block)
       requests[req.rid] = req
+      ws_send req.to_json
     end
 
     private
@@ -31,36 +33,35 @@ module Grenache
       @requests ||= {}
     end
 
-    def ws
-      @ws ||= ws_connect
-    end
-
     def grape_url
       @grape_url ||= Base.config.grape_address
     end
 
+    def ws_send(payload)
+      ws_connect unless connected?
+      @ws.send(payload)
+    end
+
     def ws_connect
-      client = Faye::Websocket::Client.new(grape_url)
-      client.on(:open, method(:on_open))
-      client.on(:message, method(:on_message))
-      client.on(:close, method(:on_close))
-      @connected = true
-      client
+      @ws = Faye::WebSocket::Client.new(grape_url)
+      @ws.on(:open, method(:on_open))
+      @ws.on(:message, method(:on_message))
+      @ws.on(:close, method(:on_close))
     end
 
     def on_open(ev)
-      puts "WS: connected to #{@grape_url}"
+      @connected = true
     end
 
     def on_message(ev)
-      msg = oj.parse(ev)
-      if req = requests[msg.rid]
-        req.yield if req.block_given?
+      msg = Oj.load(ev.data)
+      if req = requests[msg[0]]
+        req.yield(msg) if req.block_given?
       end
     end
 
     def on_close(ev)
-      puts "WS: disconnect"
+      @connected = false
     end
   end
 end

@@ -1,4 +1,6 @@
 require 'oj'
+require 'eventmachine'
+require 'faye/websocket'
 
 require 'grenache/configurable'
 require 'grenache/base'

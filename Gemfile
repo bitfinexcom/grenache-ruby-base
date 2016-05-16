@@ -9,4 +9,5 @@ group :development do
   gem "rake", "~> 10.0"
   gem "rspec", "~> 3.1.0"
   gem "simplecov", "~> 0.11.0"
+  gem "pry"
 end
