@@ -56,6 +56,7 @@ module Grenache
     def on_message(ev)
       msg = Oj.load(ev.data)
       if req = requests[msg[0]]
+        requests.delete(msg[0])
         req.yield(msg) if req.block_given?
       end
     end
