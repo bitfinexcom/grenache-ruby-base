@@ -18,18 +18,17 @@ module Grenache
       payload = [key,port]
       link.send 'announce', payload, opts, &block
       if config.auto_announce
-        periodically(5, block) do
-          link.send 'announce', payload, opts
+        periodically(5) do
+          link.send 'announce', payload, opts, &block
         end
       end
     end
 
     private
 
-    def periodically(seconds, block)
+    def periodically(seconds)
       EM.add_periodic_timer(seconds) do
         yield
-        block.call if block
       end
     end
 
