@@ -1,6 +1,5 @@
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 require 'grenache-ruby-base'
-require 'pry'
 
 EM.run {
   c = Grenache::Base.new
