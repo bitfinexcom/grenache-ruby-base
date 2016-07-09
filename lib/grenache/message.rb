@@ -1,3 +1,4 @@
+
 module Grenache
 
   # Store a single request information
@@ -10,14 +11,6 @@ module Grenache
       @opts = opts
       @_ts = Time.now
       @block = block
-    end
-
-    def request?
-      @type == 'req'
-    end
-
-    def response?
-      @type == 'res'
     end
 
     def block_given?
