@@ -20,17 +20,17 @@ module Grenache
       @ws = nil
     end
 
-    # Send a request to grape
+    # Send a message to grape
     def send(type, payload, opts = {}, &block)
-      req = Request.new(type,payload,opts, &block)
-      requests[req.rid] = req
-      ws_send req.to_json
+      m = Message.new(type,payload,opts, &block)
+      messages[m.rid] = m
+      ws_send m.to_json
     end
 
     private
 
-    def requests
-      @requests ||= {}
+    def messages
+      @messages ||= {}
     end
 
     def grape_url
@@ -55,9 +55,9 @@ module Grenache
 
     def on_message(ev)
       msg = Oj.load(ev.data)
-      if req = requests[msg[0]]
-        requests.delete(msg[0])
-        req.yield(msg) if req.block_given?
+      if req = messages[msg[0]]
+        messages.delete(msg[0])
+        req.yield(msg[1]) if req.block_given?
       end
     end
 
