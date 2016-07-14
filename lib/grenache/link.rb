@@ -48,6 +48,7 @@ module Grenache
     def ws_send(payload)
       ws_connect unless connected?
       @ws.send(payload)
+    end
 
     def http_send(payload)
       res = HTTPClient.new.post(grape_url).body
