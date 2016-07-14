@@ -4,6 +4,7 @@ module Grenache
 
     # Lookup for a specific service `key`
     # passed block is called with the result values
+    # in case of `http` backend it return the result directly
     # @param key [string] identifier of the service
     def lookup(key, opts={}, &block)
       unless addr = cache.has?(key)
@@ -41,8 +42,6 @@ module Grenache
 
     def link
       @link ||= Link.new
-      @link.connect unless @link.connected?
-      @link
     end
   end
 end
