@@ -6,7 +6,10 @@ module Grenache
     # passed block is called with the result values
     # @param key [string] identifier of the service
     def lookup(key, opts={}, &block)
-      link.send('lookup', key, opts, &block)
+      unless addr = cache.has?(key)
+        addr = link.send('lookup', key, opts, &block)
+        cache.save(key, addr)
+      end
     end
 
     # Announce a specific service `key` available on specific `port`
@@ -25,6 +28,10 @@ module Grenache
     end
 
     private
+
+    def cache
+      @cache ||= Cache.new
+    end
 
     def periodically(seconds)
       EM.add_periodic_timer(seconds) do
