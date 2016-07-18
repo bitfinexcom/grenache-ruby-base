@@ -7,7 +7,9 @@ module Grenache
     end
 
     def has?(key)
-      @cache[key][:val] if @cache.keys.include?(key) && @cache[key][:expire] < Time.now
+      if @cache.keys.include?(key) && @cache[key][:expire] >= Time.now
+        return @cache[key][:val]
+      end
     end
 
     def save(key, val)

@@ -22,11 +22,13 @@ module Grenache
 
     # Send a message to grape
     def send(type, payload, opts = {}, &block)
-      m = Message.new(type,payload,opts, &block)
-      messages[m.rid] = m
       if http?
-        http_send m.to_json
+        res = http_send type, Oj.dump({"rid" => 1234, "data" => payload})
+        block.call(res) if block
+        res
       else
+        m = Message.new(type,payload,opts, &block)
+        messages[m.rid] = m
         ws_send m.to_json
       end
     end
@@ -50,8 +52,9 @@ module Grenache
       @ws.send(payload)
     end
 
-    def http_send(payload)
-      res = HTTPClient.new.post(grape_url).body
+    def http_send(type, payload)
+      url = grape_url + type
+      res = HTTPClient.new.post(url,payload).body
       Oj.load(res)
     end
 

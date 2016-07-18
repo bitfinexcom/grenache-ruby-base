@@ -11,6 +11,7 @@ module Grenache
         addr = link.send('lookup', key, opts, &block)
         cache.save(key, addr)
       end
+      addr
     end
 
     # Announce a specific service `key` available on specific `port`
