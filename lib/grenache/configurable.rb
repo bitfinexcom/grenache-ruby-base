@@ -2,12 +2,13 @@ module Grenache
 
   # Encapsulate Configuration parameters
   class Configuration
-    attr_accessor :grape_address, :auto_announce
+    attr_accessor :grape_address, :auto_announce, :timeout
 
     # Initialize default values
     def initialize
       self.grape_address = "ws://127.0.0.1:30001"
       self.auto_announce = true
+      self.timeout = 5
     end
   end
 
