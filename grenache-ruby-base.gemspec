@@ -7,6 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "grenache-ruby-base"
   spec.version       = Grenache::VERSION
   spec.email         = ["info@bitfinex.com"]
+  spec.author        = "Bitfinex"
 
   spec.summary       = %q{Grenache Base Client implementation.}
   spec.homepage      = "https://github.com/bitfinexcom/grenache-ruby-base"
