@@ -49,6 +49,7 @@ module Grenache
 
     def ws_send(payload)
       ws_connect unless connected?
+    ensure
       @ws.send(payload)
     end
 
