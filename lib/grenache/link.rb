@@ -82,7 +82,7 @@ module Grenache
     end
 
     def http
-      @http |= HTTPClient.new do |c|
+      @http ||= HTTPClient.new do |c|
         c.connect_timeout = Base.config.timeout
         c.receive_timeout = Base.config.timeout
         c.send_timeout = Base.config.timeout
