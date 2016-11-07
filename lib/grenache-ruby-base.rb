@@ -2,7 +2,6 @@ require 'oj'
 require 'eventmachine'
 require 'faye/websocket'
 require 'httpclient'
-require 'pry'
 
 require 'grenache/configurable'
 require 'grenache/cache'
