@@ -2,9 +2,8 @@ source 'https://rubygems.org'
 
 gem "eventmachine", "~> 1.0.9"
 gem "faye-websocket", "~> 0.10.3"
-gem "oj", "~> 2.1.0"
-gem "httpclient"
-gem 'pry'
+gem "oj", "~> 2.17.5"
+gem "httpclient", "~> 2.8"
 
 
 group :development do
