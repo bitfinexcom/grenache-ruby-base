@@ -2,6 +2,11 @@ module Grenache
   # Implement Grape connection helpers
   class Link
 
+    # Initialize passing configuration
+    def initialize(config)
+      @config = config
+    end
+
     # Connect to grape
     def connect
       unless connected?
@@ -40,7 +45,7 @@ module Grenache
     end
 
     def grape_url
-      @grape_url ||= Base.config.grape_address
+      @grape_url ||= @config.grape_address
     end
 
     def http?
@@ -55,7 +60,11 @@ module Grenache
 
     def http_send(type, payload)
       url = grape_url + type
-      res = http.post(url,payload).body
+      options = {
+        body: payload,
+        timeout: Base.config.timeout
+      }
+      res = HTTParty.post(url, options).body
       Oj.load(res)
     end
 
@@ -80,15 +89,6 @@ module Grenache
 
     def on_close(ev)
       @connected = false
-    end
-
-    def http
-      @http ||= HTTPClient.new do |c|
-        c.connect_timeout = Base.config.timeout
-        c.receive_timeout = Base.config.timeout
-        c.send_timeout = Base.config.timeout
-        c.keep_alive_timeout = Base.config.timeout
-      end
     end
   end
 end

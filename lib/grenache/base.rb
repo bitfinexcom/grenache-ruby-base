@@ -42,7 +42,7 @@ module Grenache
     end
 
     def link
-      @link ||= Link.new
+      @link ||= Link.new(self.class.config)
     end
   end
 end
