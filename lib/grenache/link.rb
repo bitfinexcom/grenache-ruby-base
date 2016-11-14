@@ -2,6 +2,11 @@ module Grenache
   # Implement Grape connection helpers
   class Link
 
+    # Initialize passing configuration
+    def initialize(config)
+      @config = config
+    end
+
     # Connect to grape
     def connect
       unless connected?
@@ -40,7 +45,7 @@ module Grenache
     end
 
     def grape_url
-      @grape_url ||= Base.config.grape_address
+      @grape_url ||= @config.grape_address
     end
 
     def http?
