@@ -9,8 +9,30 @@ module Grenache
       @payload = payload
       @type = type
       @opts = opts
+      @rid = opts[:rid]  if opts[:rid]
       @_ts = Time.now
       @block = block
+    end
+
+    def self.parse(json)
+      rid,type,payload = Oj.load(json)
+      new(type,payload, {rid:rid})
+    end
+
+    def self.req(payload)
+      new('req',payload)
+    end
+
+    def self.response_to(req,payload)
+      new('res',payload,{rid: req.rid})
+    end
+
+    def request?
+      @type == 'req'
+    end
+
+    def response?
+      @type == 'res'
     end
 
     def block_given?
