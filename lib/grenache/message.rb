@@ -16,6 +16,10 @@ module Grenache
 
     def self.parse(json)
       rid,type,payload = Oj.load(json)
+      if payload.nil?
+        payload = type
+        type = 'res'
+      end
       new(type,payload, {rid:rid})
     end
 
