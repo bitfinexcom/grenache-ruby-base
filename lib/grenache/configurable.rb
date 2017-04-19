@@ -5,10 +5,15 @@ module Grenache
     attr_accessor :grape_address, :auto_announce, :timeout
 
     # Initialize default values
-    def initialize
-      self.grape_address = "ws://127.0.0.1:30001"
-      self.auto_announce = true
-      self.timeout = 5
+    def initialize(params = {})
+      if params
+        self.grape_address = params[:grape_address]
+        self.auto_announce = params[:auto_announce]
+        self.timeout = params[:timeout]
+      end
+      self.grape_address ||= "ws://127.0.0.1:30001"
+      self.auto_announce ||= true
+      self.timeout ||= 5
     end
   end
 
@@ -19,7 +24,7 @@ module Grenache
     end
 
     def config
-      self.class.config
+      @configuration || self.class.config
     end
 
     module ClassMethods

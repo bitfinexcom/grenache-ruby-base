@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Grenache::Request do
+describe Grenache::Message do
  let(:payload) { Oj.dump({a: 1, b:2}) }
- let(:request) { Grenache::Request.new('type',payload) }
+ let(:request) { Grenache::Message.new('type',payload) }
 
  it {expect(request.qhash).to eq('type"{\":a\":1,\":b\":2}"') }
 end

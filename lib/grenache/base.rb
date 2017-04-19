@@ -2,6 +2,11 @@ module Grenache
   class Base
     include Grenache::Configurable
 
+    # Initialize can accept custom configuration parameters
+    def initialize(params = {})
+      @configuration = Configuration.new(params)
+    end
+
     # Lookup for a specific service `key`
     # passed block is called with the result values
     # in case of `http` backend it return the result directly
