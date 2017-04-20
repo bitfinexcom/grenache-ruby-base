@@ -23,8 +23,8 @@ module Grenache
       new(type,payload, {rid:rid})
     end
 
-    def self.req(payload)
-      new('req',payload)
+    def self.req(type,payload)
+      new(type,payload)
     end
 
     def self.response_to(req,payload)
@@ -32,7 +32,7 @@ module Grenache
     end
 
     def request?
-      @type == 'req'
+      @type != 'res'
     end
 
     def response?
@@ -60,7 +60,11 @@ module Grenache
     end
 
     def to_json
-      Oj.dump([rid,type,payload])
+      if response?
+        Oj.dump([rid,payload])
+      else
+        Oj.dump([rid,type,payload])
+      end
     end
   end
 end
