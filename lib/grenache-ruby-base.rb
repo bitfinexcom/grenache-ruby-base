@@ -2,6 +2,7 @@ require 'oj'
 require 'eventmachine'
 require 'faye/websocket'
 require 'httparty'
+require 'securerandom'
 
 require 'grenache/configurable'
 require 'grenache/cache'

@@ -28,7 +28,7 @@ module Grenache
     # Send a message to grape
     def send(type, payload, opts = {}, &block)
       if http?
-        res = http_send type, Oj.dump({"rid" => 1234, "data" => payload})
+        res = http_send type, Oj.dump({"rid" => uuid, "data" => payload})
         block.call(res) if block
         res
       else
@@ -89,6 +89,10 @@ module Grenache
 
     def on_close(ev)
       @connected = false
+    end
+
+    def uuid
+      SecureRandom.uuid
     end
   end
 end
