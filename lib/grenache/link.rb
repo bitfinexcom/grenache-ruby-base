@@ -66,6 +66,10 @@ module Grenache
       }
       res = HTTParty.post(url, options).body
       Oj.load(res)
+    rescue => err
+      if type != 'announce'
+        raise err
+      end
     end
 
     def ws_connect
