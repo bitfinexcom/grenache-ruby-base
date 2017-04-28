@@ -28,7 +28,7 @@ module Grenache
     # Send a message to grape
     def send(type, payload, opts = {}, &block)
       if http?
-        res = http_send type, Oj.dump({"rid" => 1234, "data" => payload})
+        res = http_send type, Oj.dump({"rid" => uuid, "data" => payload})
         block.call(res) if block
         res
       else
@@ -66,6 +66,10 @@ module Grenache
       }
       res = HTTParty.post(url, options).body
       Oj.load(res)
+    rescue => err
+      if type != 'announce'
+        raise err
+      end
     end
 
     def ws_connect
@@ -89,6 +93,10 @@ module Grenache
 
     def on_close(ev)
       @connected = false
+    end
+
+    def uuid
+      SecureRandom.uuid
     end
   end
 end
