@@ -9,5 +9,5 @@ require 'grenache/cache'
 require 'grenache/base'
 require 'grenache/version'
 require 'grenache/link'
-require 'grenache/message'
-
+require 'grenache/grape_message'
+require 'grenache/service_message'
