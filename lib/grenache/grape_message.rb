@@ -1,8 +1,7 @@
-
 module Grenache
 
   # Store a single request information
-  class Message
+  class GrapeMessage
     attr_accessor :payload, :type, :opts, :_ts
 
     def initialize(type, payload, opts={}, &block)

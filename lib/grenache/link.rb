@@ -32,7 +32,7 @@ module Grenache
         block.call(res) if block
         res
       else
-        m = Message.new(type,payload,opts, &block)
+        m = GrapeMessage.new(type,payload,opts, &block)
         messages[m.rid] = m
         ws_send m.to_json
       end
