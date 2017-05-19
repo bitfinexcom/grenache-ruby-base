@@ -28,7 +28,7 @@ module Grenache
       payload = [key,port]
       link.send 'announce', payload, opts, &block
       if config.auto_announce
-        periodically(1) do
+        periodically(config.auto_announce_interval) do
           link.send 'announce', payload, opts, &block
         end
       end
