@@ -1,0 +1,5 @@
+module Grenache
+  SSL_VERIFY_NONE = 0
+  SSL_VERIFY_PEER = 1
+  SSL_VERIFY_FAIL_IF_NO_PEER_CERT = 2
+end

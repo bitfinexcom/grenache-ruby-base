@@ -6,11 +6,11 @@ module Grenache
     attr_accessor :grape_address, :timeout
 
     # service configuration parameters
-    attr_accessor :service_timeout, :auto_announce_interval, :auto_announce
+    attr_accessor :service_timeout, :auto_announce_interval, :auto_announce, :service_host
 
     # service SSL specific configuration
     # Cert is supposed to be PKCS12
-    attr_accessor :key, :cert_pem, :ca, :reject_unauthorized
+    attr_accessor :key, :cert_pem, :ca, :reject_unauthorized, :verify_mode
 
     # Initialize default values
     def initialize(params = {})
@@ -20,11 +20,13 @@ module Grenache
       set_val :auto_announce_interval, params, 5
       set_bool :auto_announce, params, true
       set_val :service_timeout, params, 5
+      set_val :service_host, params, "0.0.0.0"
 
       set_val :key, params, nil
       set_val :cert_pem, params, nil
       set_val :ca, params, nil
       set_val :reject_unauthorized, params, nil
+      set_val :verify_mode, params, Grenache::SSL_VERIFY_PEER
     end
 
     private

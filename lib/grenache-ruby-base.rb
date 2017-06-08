@@ -4,6 +4,7 @@ require 'faye/websocket'
 require 'httparty'
 require 'securerandom'
 
+require 'grenache/ssl_verify'
 require 'grenache/configurable'
 require 'grenache/cache'
 require 'grenache/base'
