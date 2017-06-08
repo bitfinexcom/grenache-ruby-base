@@ -13,10 +13,12 @@ describe Grenache::VERSION do
 
   describe Grenache::Base do
     before do
-      @base = Grenache::Base.new timeout: 10
+      Grenache::Base.configure do |conf|
+        conf.timeout = 10
+      end
     end
 
-    it { expect(@base.config.timeout).to eq(10) }
+    it { expect(Grenache::Base.config.timeout).to eq(10) }
   end
 end
 
