@@ -2,14 +2,48 @@ module Grenache
 
   # Encapsulate Configuration parameters
   class Configuration
-    attr_accessor :grape_address, :auto_announce, :timeout, :auto_announce_interval
+    # grape configuration
+    attr_accessor :grape_address, :timeout
+
+    # service configuration parameters
+    attr_accessor :service_timeout, :auto_announce_interval, :auto_announce
+
+    # service SSL specific configuration
+    # Cert is supposed to be PKCS12
+    attr_accessor :key, :cert_pem, :ca, :reject_unauthorized
 
     # Initialize default values
     def initialize(params = {})
-      self.grape_address = params[:grape_address] ? params[:grape_address] : "ws://127.0.0.1:30001"
-      self.auto_announce = params[:auto_announce].nil? ? true : params[:auto_announce]
-      self.auto_announce_interval = params[:auto_announce_interval] ? params[:auto_announce_interval] : 5
-      self.timeout = params[:timeout] ? params[:timeout] : 5
+      set_val :grape_address, params, "ws://127.0.0.1:30001"
+      set_val :timeout, params, 5
+
+      set_val :auto_announce_interval, params, 5
+      set_bool :auto_announce, params, true
+      set_val :service_timeout, params, 5
+
+      set_val :key, params, nil
+      set_val :cert_pem, params, nil
+      set_val :ca, params, nil
+      set_val :reject_unauthorized, params, nil
+    end
+
+    private
+    def set_bool(name, params, default)
+      method = "#{name}=".to_sym
+      if params[name].nil?
+        send(method, default)
+      else
+        send(method, params[name])
+      end
+    end
+
+    def set_val(name, params, default)
+      method = "#{name}=".to_sym
+      if params[name]
+        send(method, params[name])
+      else
+        send(method, default)
+      end
     end
   end
 
@@ -20,7 +54,7 @@ module Grenache
     end
 
     def config
-      @configuration || self.class.config
+      self.class.config
     end
 
     module ClassMethods
