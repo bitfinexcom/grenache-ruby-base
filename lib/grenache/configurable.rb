@@ -7,6 +7,8 @@ module Grenache
 
     # service configuration parameters
     attr_accessor :service_timeout, :auto_announce_interval, :auto_announce, :service_host
+    # thin server
+    attr_accessor :thin_threaded, :thin_threadpool_size
 
     # service SSL specific configuration
     # Cert is supposed to be PKCS12
@@ -21,6 +23,9 @@ module Grenache
       set_bool :auto_announce, params, true
       set_val :service_timeout, params, 5
       set_val :service_host, params, "0.0.0.0"
+
+      set_bool :thin_threaded, params, false
+      set_val :thin_threadpool_size, params, 0
 
       set_val :key, params, nil
       set_val :cert_pem, params, nil
