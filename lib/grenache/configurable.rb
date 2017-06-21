@@ -14,7 +14,7 @@ module Grenache
 
     # Initialize default values
     def initialize(params = {})
-      set_val :grape_address, params, "ws://127.0.0.1:30001"
+      set_val :grape_address, params, "http://127.0.0.1:40001/"
       set_val :timeout, params, 5
 
       set_val :auto_announce_interval, params, 5
@@ -41,6 +41,7 @@ module Grenache
 
     def set_val(name, params, default)
       method = "#{name}=".to_sym
+
       if params[name]
         send(method, params[name])
       else
@@ -56,7 +57,7 @@ module Grenache
     end
 
     def config
-      self.class.config
+      @configuration || self.class.config
     end
 
     module ClassMethods

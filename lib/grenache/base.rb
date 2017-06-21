@@ -4,7 +4,7 @@ module Grenache
 
     # Initialize can accept custom configuration parameters
     def initialize(params = {})
-      @configuration = Configuration.new(params)
+      @configuration = Configuration.new(params) unless params.empty?
     end
 
     # Lookup for a specific service `key`
@@ -47,7 +47,7 @@ module Grenache
     end
 
     def link
-      @link ||= Link.new(self.class.config)
+      @link ||= Link.new config
     end
   end
 end
