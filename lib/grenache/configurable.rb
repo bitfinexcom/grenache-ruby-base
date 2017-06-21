@@ -56,7 +56,7 @@ module Grenache
     end
 
     def config
-      self.class.config
+      @configuration || self.class.config
     end
 
     module ClassMethods
