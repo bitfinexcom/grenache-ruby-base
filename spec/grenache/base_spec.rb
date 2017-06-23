@@ -19,10 +19,7 @@ describe Grenache::VERSION do
     end
 
     it { expect(Grenache::Base.config.timeout).to eq(10) }
-
-    it { expect(Grenache::Base.new( timeout: 11).config.timeout).to eq(11) }
+    it { expect(Grenache::Base.new(timeout: 11).config.timeout).to eq(11) }
   end
-
-
 end
 
