@@ -5,8 +5,10 @@ module Grenache
     # Set default configuration values for BASE
     default_conf do |conf|
       conf.grape_address = "http://127.0.0.1:40001/"
+      conf.auto_announce = true
       conf.timeout = 5
       conf.auto_announce_interval = 5
+      conf.service_host = "0.0.0.0"
     end
 
     # Initialize can accept custom configuration parameters
