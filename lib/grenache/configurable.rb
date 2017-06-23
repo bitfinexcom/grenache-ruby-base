@@ -1,33 +1,36 @@
 module Grenache
-  class Configuration
+  class BaseConfiguration
+    def values
+      @values ||= {}
+    end
+
+    def method_missing(name, *args, &block)
+      if name[-1] == "="
+        values[name[0,name.size-1]] = args.first
+      else
+        values[name.to_s]
+      end
+    end
+  end
+
+  class Configuration <BaseConfiguration
 
     def initialize(params = {})
-      @values ||= {}
-      self.class.configuration_blocks.each do |b|
-        b.call self
-      end
+      @values = self.class.default.values
 
       params.keys.each do |k|
         @values[k.to_s] = params[k]
       end
     end
 
-    def self.default_conf &block
-      @configuration_blocks ||= []
-      @configuration_blocks << block
+    def self.set_default &block
+      yield default
     end
 
-    def self.configuration_blocks
-      @configuration_blocks || []
+    def self.default
+      @defaults ||= BaseConfiguration.new
     end
 
-    def method_missing(name, *args, &block)
-      if name[-1] == "="
-        @values[name[0,name.size-1]] = args.first
-      else
-        @values[name.to_s]
-      end
-    end
   end
 
   # Configuration helpers
@@ -38,7 +41,7 @@ module Grenache
 
     # Instance configuration, can be altered indipendently
     def config
-      @configuration ||= self.class.config
+      @configuration ||= Configuration.new
     end
 
     module ClassMethods
@@ -49,6 +52,10 @@ module Grenache
       # Class configuration
       def config
         @configuration ||= Configuration.new
+      end
+
+      def default_conf &block
+        Grenache::Configuration.set_default &block
       end
     end
   end
