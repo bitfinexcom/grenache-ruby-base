@@ -25,6 +25,7 @@ module Grenache
         addr = link.send('lookup', key, opts, &block)
         cache.save(key, addr)
       end
+      yield addr if block_given?
       addr
     end
 
