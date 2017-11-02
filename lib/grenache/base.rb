@@ -9,6 +9,7 @@ module Grenache
       conf.timeout = 5
       conf.auto_announce_interval = 5
       conf.service_host = "0.0.0.0"
+      conf.cache_expire = 5
     end
 
     # Initialize can accept custom configuration parameters
@@ -47,7 +48,7 @@ module Grenache
     private
 
     def cache
-      @cache ||= Cache.new
+      @cache ||= Cache.new(config.cache_expire)
     end
 
     def periodically(seconds)
