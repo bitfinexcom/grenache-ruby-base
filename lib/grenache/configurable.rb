@@ -21,6 +21,11 @@ module Grenache
       params.keys.each do |k|
         @values[k.to_s] = params[k]
       end
+
+      # sanitize urls
+      if not @values["grape_address"].end_with?("/")
+        @values["grape_address"] = @values["grape_address"] + "/"
+      end
     end
 
     def self.set_default &block
