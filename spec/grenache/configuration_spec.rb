@@ -41,5 +41,16 @@ describe Grenache::VERSION do
     it { expect(NewTransport.config.my_default_value).to eq(10) }
     it { expect(NewTransport.new(my_default_value: 11).config.my_default_value).to eq(11) }
   end
+
+  describe 'config sanitizes urls' do
+    it {
+      base = Grenache::Base.new grape_address: "http://127.0.0.1:30001"
+      expect(base.config.grape_address).to eq("http://127.0.0.1:30001/")
+    }
+    it {
+      base = Grenache::Base.new grape_address: "http://127.0.0.1:50001/"
+      expect(base.config.grape_address).to eq("http://127.0.0.1:50001/")
+    }
+  end
 end
 
