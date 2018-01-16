@@ -1,53 +1,41 @@
 module Grenache
+  class BaseConfiguration
+    def values
+      @values ||= {}
+    end
 
-  # Encapsulate Configuration parameters
-  class Configuration
-    # grape configuration
-    attr_accessor :grape_address, :timeout
+    def method_missing(name, *args, &block)
+      if name[-1] == "="
+        values[name[0,name.size-1]] = args.first
+      else
+        values[name.to_s]
+      end
+    end
+  end
 
-    # service configuration parameters
-    attr_accessor :service_timeout, :auto_announce_interval, :auto_announce, :service_host
+  class Configuration <BaseConfiguration
 
-    # service SSL specific configuration
-    # Cert is supposed to be PKCS12
-    attr_accessor :key, :cert_pem, :ca, :reject_unauthorized, :verify_mode
-
-    # Initialize default values
     def initialize(params = {})
-      set_val :grape_address, params, "http://127.0.0.1:40001/"
-      set_val :timeout, params, 5
+      @values = self.class.default.values
 
-      set_val :auto_announce_interval, params, 5
-      set_bool :auto_announce, params, true
-      set_val :service_timeout, params, 5
-      set_val :service_host, params, "0.0.0.0"
+      params.keys.each do |k|
+        @values[k.to_s] = params[k]
+      end
 
-      set_val :key, params, nil
-      set_val :cert_pem, params, nil
-      set_val :ca, params, nil
-      set_val :reject_unauthorized, params, nil
-      set_val :verify_mode, params, Grenache::SSL_VERIFY_PEER
-    end
-
-    private
-    def set_bool(name, params, default)
-      method = "#{name}=".to_sym
-      if params[name].nil?
-        send(method, default)
-      else
-        send(method, params[name])
+      # sanitize urls
+      if not @values["grape_address"].end_with?("/")
+        @values["grape_address"] = @values["grape_address"] + "/"
       end
     end
 
-    def set_val(name, params, default)
-      method = "#{name}=".to_sym
-
-      if params[name]
-        send(method, params[name])
-      else
-        send(method, default)
-      end
+    def self.set_default &block
+      yield default
     end
+
+    def self.default
+      @defaults ||= BaseConfiguration.new
+    end
+
   end
 
   # Configuration helpers
@@ -56,8 +44,9 @@ module Grenache
       base.extend(ClassMethods)
     end
 
+    # Instance configuration, can be altered indipendently
     def config
-      @configuration || self.class.config
+      @configuration ||= Configuration.new
     end
 
     module ClassMethods
@@ -65,8 +54,13 @@ module Grenache
         yield config
       end
 
+      # Class configuration
       def config
         @configuration ||= Configuration.new
+      end
+
+      def default_conf &block
+        Grenache::Configuration.set_default &block
       end
     end
   end
