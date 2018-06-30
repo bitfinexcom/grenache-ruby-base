@@ -16,11 +16,7 @@ module Grenache
   class Configuration < BaseConfiguration
 
     def initialize(params = {})
-      @values = {}
-
-      self.class.default.values.each do |k, v|
-        @values[k.to_s] = v
-      end
+      @values = self.class.default.values
 
       params.each do |k, v|
         @values[k.to_s] = v
