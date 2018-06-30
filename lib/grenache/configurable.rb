@@ -13,13 +13,17 @@ module Grenache
     end
   end
 
-  class Configuration <BaseConfiguration
+  class Configuration < BaseConfiguration
 
     def initialize(params = {})
-      @values = self.class.default.values
+      @values = {}
 
-      params.keys.each do |k|
-        @values[k.to_s] = params[k]
+      self.class.default.values.each do |k, v|
+        @values[k.to_s] = v
+      end
+
+      params.each do |k, v|
+        @values[k.to_s] = v
       end
 
       # sanitize urls
