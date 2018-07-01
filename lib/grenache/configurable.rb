@@ -16,7 +16,7 @@ module Grenache
   class Configuration < BaseConfiguration
 
     def initialize(params = {})
-      @values = self.class.default.values
+      @values = self.class.default.values.clone
 
       params.each do |k, v|
         @values[k.to_s] = v
@@ -50,18 +50,15 @@ module Grenache
     end
 
     module ClassMethods
-      def configure
-        yield config
-      end
-
       # Class configuration
       def config
-        @configuration ||= Configuration.new
+        Grenache::Configuration.default
       end
 
       def default_conf &block
         Grenache::Configuration.set_default &block
       end
+      alias_method :configure, :default_conf
     end
   end
 end
